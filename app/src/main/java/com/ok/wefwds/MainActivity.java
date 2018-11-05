@@ -20,6 +20,8 @@ import org.opencv.core.MatOfInt;
 
 import java.io.File;
 
+import static android.provider.MediaStore.*;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,11 +53,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = cam.getIntent();
-        /*
+        String filename = "photo";
+
+        //Uri imageUri = new Uri();
+
         File photo = new File(Environment.getExternalStorageDirectory(), filename);
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-        imageUri = Uri.fromFile(photo);
-        */
+        takePictureIntent.putExtra(EXTRA_OUTPUT, Uri.fromFile(photo));
+        //imageUri = Uri.fromFile(photo);
+
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
