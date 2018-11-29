@@ -1,0 +1,9 @@
+*.gradle
+*.properties
+*.externalNativeBuild
+*.iml
+*.idea
+build/
+gradlew*
+sdk/
+gradle/
