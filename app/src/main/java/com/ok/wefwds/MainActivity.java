@@ -13,6 +13,9 @@ import android.widget.ImageView;
 
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfKeyPoint;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
@@ -73,36 +76,34 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Image im = new Image(imageUri);
+            Image im2 = im.clone();
+            im.bilateralFilter();
             im.makeGray();
-            int x[] = im.averageColor(100);
+            int x[] = im.averageColor(500);
             boolean inv = x[2] - x[0] < x[0] - x[1];
 
             im.makeBinary(10, inv);
 
-            im.reduceNoise(inv);
+            Mat l = im.detectLines();
+            double[] lines = new double[l.height()];
 
-
-            /*x = im.averageColor(100);
-            inv = x[2] - x[0] < x[0] - x[1];
-
-
-
-
-
-            //double y = im.detectStaffRotation(im.detectLines());
-
-            //im.rotate(-y);*/
-
-            Mat lin = im.detectLines();
-
-            double[] lines = new double[lin.height()];
-
-            for(int i=0;i<lin.height();i++){
-                lines[i] = lin.get(i,0)[1];
+            for(int i=0;i<l.height();i++){
+                lines[i] = l.get(i,0)[1];
             }
 
-            double[] h = Image.clusters(lines, 10);
-            im.drawLines(h, 128);
+            double[] h = Image.clusters(lines, 5);
+            im.drawLines(h, new Scalar(128));
+            im2.bilateralFilter();
+            im2.makeGray();
+            im2.blur(15);
+            im2.makeBinary(x[0], inv);
+            im2.applyErosion(20);
+            im2.applyDilation(15);
+            List<MatOfPoint> cunt  = Image.filterContours(im2.contourDetector());
+            im2.drawContours(cunt, new Scalar(255));
+            cunt  = Image.filterContours(im2.contourDetector());
+
+            im.drawContours(cunt, new Scalar(0));
             ImageView imageView = findViewById(R.id.imv);
             imageView.setImageBitmap(im.getBitmap());
         }
