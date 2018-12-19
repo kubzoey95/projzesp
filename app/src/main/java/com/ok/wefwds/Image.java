@@ -1,11 +1,19 @@
 package com.ok.wefwds;
 
 import android.content.Context;
+import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 
+import org.opencv.core.MatOfKeyPoint;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.dnn.Dnn;
+import org.opencv.dnn.Net;
 import org.opencv.features2d.Feature2D;
 import org.opencv.features2d.FeatureDetector;
 import org.opencv.features2d.Features2d;
@@ -16,9 +24,14 @@ import org.opencv.android.Utils;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.features2d.ORB;
+import org.opencv.features2d.Params;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.LineSegmentDetector;
+import org.opencv.photo.Photo;
 
+import java.io.BufferedInputStream;
+import java.io.FileOutputStream;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.io.File;
@@ -39,9 +52,13 @@ import static java.lang.Math.exp;
 import static java.lang.Math.log;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static java.lang.Math.pow;
 import static java.lang.Math.random;
 import static java.lang.Math.signum;
+import static java.lang.Math.sqrt;
 import static org.opencv.core.CvType.CV_64FC1;
+import static org.opencv.core.CvType.CV_8UC1;
+import static org.opencv.core.CvType.CV_8UC3;
 
 /**
  * Created by kubzoey on 2018-10-23.
@@ -55,6 +72,10 @@ public class Image {
 
     public Image(){
 
+    }
+
+    public Image clone(){
+        return new Image(imageMatrix.clone());
     }
 
     public Image(Mat mat){
@@ -93,6 +114,15 @@ public class Image {
     public void makeGray(){
         Imgproc.cvtColor(imageMatrix, imageMatrix, Imgproc.COLOR_RGB2GRAY);
     }
+
+    public void inv(){
+        Core.bitwise_not(imageMatrix, imageMatrix);
+    }
+
+    public void blur(int size){
+        Imgproc.blur(imageMatrix, imageMatrix, new Size(size, size));
+    }
+
     public void drawLines(List<Integer> lines){
         Imgproc.cvtColor(imageMatrix, imageMatrix, Imgproc.COLOR_GRAY2RGB);
         for (int i=0; i<lines.size();i++) {
@@ -120,23 +150,18 @@ public class Image {
         }
     }
 
-    public void invert(){
-            Core.bitwise_not(imageMatrix,imageMatrix);
-    }
-
-    public int calculateAverageColorProbabilitically(double no_samples){
-        Size imageMatrixSize = imageMatrix.size();
-        int width = (int) imageMatrixSize.width;
-        int height = (int) imageMatrixSize.height;
-        no_samples = max(no_samples, width*height);
-        Random generator = new Random();
-        int sum = 0;
-        for (int i=0;i<no_samples;i++){
-            sum += imageMatrix.get(generator.nextInt(height), generator.nextInt(width))[0];
+    public void makeBinary(double thresh, boolean inv){
+        if (inv) {
+            Imgproc.threshold(imageMatrix, imageMatrix, thresh, 255, Imgproc.THRESH_BINARY_INV);
         }
-        return sum/(int)no_samples;
+        else{
+            Imgproc.threshold(imageMatrix, imageMatrix, thresh, 255, Imgproc.THRESH_BINARY);
+        }
     }
 
+    public void denoiseNI(){
+        Photo.fastNlMeansDenoising(imageMatrix, imageMatrix);
+    }
     public void reduceNoise(boolean erosionFirst){
         if (erosionFirst){
             this.applyErosion(2);
@@ -165,15 +190,130 @@ public class Image {
         Mat lines = new Mat();
         Mat width = new Mat();
         width.create(50,50, Core.TYPE_GENERAL);
-        Imgproc.HoughLinesP(imageMatrix, lines, 1, 1*PI/180., (int)(imageMatrix.width() * 0.4), imageMatrix.width() * 0.8, imageMatrix.width() * 0.3);
+        Imgproc.HoughLinesP(imageMatrix, lines, 2, 2*PI/180., (int)(imageMatrix.width() * 0.4), imageMatrix.width() * 0.8, imageMatrix.width() * 0.3);
 
         return lines;
     }
 
-    public void drawLines(double[] heights, double col){
+    public Mat detectLines(double threshold, double minLineLength, double maxLineGap){
+        Mat lines = new Mat();
+        Imgproc.HoughLinesP(imageMatrix, lines, 1., PI/180., (int)(imageMatrix.width() * threshold), imageMatrix.width() * minLineLength, imageMatrix.width() * maxLineGap);
+        return lines;
+    }
+
+    public void drawLines(Mat m, Scalar col, int thickness){
+        double[] line;
+        for(int i = 0; i<m.height();i++) {
+            line = m.get(i,0);
+            Imgproc.line(imageMatrix, new Point(line[0], line[1]), new Point(line[2], line[3]), col, thickness);
+        }
+    }
+
+    public List<MatOfPoint> contourDetector(){
+        List<MatOfPoint> contours = new ArrayList<>();
+        Imgproc.findContours(imageMatrix, contours,new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+        return contours;
+    }
+
+    public void drawContours(List<MatOfPoint> contours, Scalar col){
+        Imgproc.drawContours(imageMatrix, contours, -1, col, 50);
+    }
+
+    public static List<MatOfPoint> filterContours(List<MatOfPoint> contours){
+        List<MatOfPoint> filtered = new ArrayList<>();
+        for(int i = 0; i<contours.size();i++) {
+            MatOfPoint2f contour = new MatOfPoint2f(contours.get(i).toArray());
+            double arcLength = Imgproc.arcLength(contour, true);
+            double area = Imgproc.contourArea(contour);
+            if ((4. * PI * area) / pow(arcLength,2.) > 0.5 && area > 80.){
+                filtered.add(new MatOfPoint(contour.toArray()));
+            }
+        }
+        return filtered;
+    }
+
+    public MatOfKeyPoint blobDetection(Context c){
+        MatOfKeyPoint kps = new MatOfKeyPoint();
+        FeatureDetector fd = FeatureDetector.create(FeatureDetector.SIMPLEBLOB);
+        fd.read(getPath("blob.xml", c));
+        fd.detect(imageMatrix, kps);
+        return kps;
+    }
+
+    public MatOfPoint getContourCenter(MatOfPoint m){
+        return new MatOfPoint();
+    }
+
+    private static String getPath(String file, Context context) {
+        AssetManager assetManager = context.getAssets();
+        BufferedInputStream inputStream = null;
+        try {
+            // Read data from assets.
+            inputStream = new BufferedInputStream(assetManager.open(file));
+            byte[] data = new byte[inputStream.available()];
+            inputStream.read(data);
+            inputStream.close();
+            // Create copy file in storage.
+            File outFile = new File(context.getFilesDir(), file);
+            FileOutputStream os = new FileOutputStream(outFile);
+            os.write(data);
+            os.close();
+            // Return a path to file which may be read in common way.
+            return outFile.getAbsolutePath();
+        } catch (IOException ex) {
+            Log.i("OpenCV", "Failed to upload a file");
+        }
+        return "";
+    }
+
+    public void drawKeyPoints(MatOfKeyPoint m, Scalar col){
+        Features2d.drawKeypoints(imageMatrix, m, imageMatrix, col);
+    }
+
+    public Mat getBlob(){
+        final int IN_WIDTH = 300;
+        final int IN_HEIGHT = 300;
+        final float WH_RATIO = (float)IN_WIDTH / IN_HEIGHT;
+        final double IN_SCALE_FACTOR = 1;
+        final double MEAN_VAL = 127.5;
+        final double THRESHOLD = 0.2;
+        Mat to_blob = new Mat();
+
+        Imgproc.resize(imageMatrix, to_blob, new Size(300,300));
+        Imgproc.cvtColor(to_blob, to_blob, Imgproc.COLOR_GRAY2RGB);
+        to_blob = Dnn.blobFromImage(to_blob, IN_SCALE_FACTOR, new Size(IN_WIDTH, IN_HEIGHT), new Scalar(MEAN_VAL, MEAN_VAL, MEAN_VAL));
+        return to_blob;
+    }
+
+    public void bilateralFilter(){
+        Mat contoured = new Mat();
+        imageMatrix.convertTo(imageMatrix, CV_8UC3);
+        Imgproc.cvtColor(imageMatrix,imageMatrix,Imgproc.COLOR_RGBA2RGB);
+        Imgproc.bilateralFilter(imageMatrix, contoured, 5, 175, 175);
+        //Imgproc.Canny(contoured, imageMatrix, 75, 200);
+        contoured.convertTo(imageMatrix, CV_8UC1);
+    }
+
+    public void canny(){
+        Imgproc.Canny(imageMatrix, imageMatrix, 20, 240);
+    }
+
+
+    public void drawCircles(Mat circles){
+        double len = circles.width();
+        Point center;
+        double[] circle;
+        for(int i=0;i<len;i++) {
+            circle = circles.get(0,i);
+            center = new Point(circle[0], circle[1]);
+            Imgproc.circle(imageMatrix, center, (int)circle[2], new Scalar(128));
+        }
+    }
+
+    public void drawLines(double[] heights, Scalar col){
         double width = imageMatrix.width();
         for(int i=0; i<heights.length;i++) {
-            Imgproc.line(imageMatrix, new Point(0, heights[i]), new Point(width - 1, heights[i]), new Scalar(col), 50);
+            Imgproc.line(imageMatrix, new Point(0, heights[i]), new Point(width - 1, heights[i]), col, 50);
         }
     }
 
