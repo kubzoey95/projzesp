@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 import org.opencv.android.OpenCVLoader;
@@ -45,6 +46,10 @@ public class MainActivity extends Activity {
         System.loadLibrary("native-lib");
     }
 
+    public void changeLayout(View view) {
+        dispatchTakePictureIntent();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +57,6 @@ public class MainActivity extends Activity {
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
-
-        dispatchTakePictureIntent();
     }
 
     private void dispatchTakePictureIntent() {
