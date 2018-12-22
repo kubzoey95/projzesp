@@ -5,10 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.ok.wefwds.MainActivity">
+
     <ImageView
-        android:contentDescription="image"
         android:id="@+id/imv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:contentDescription="image" />
 
 </android.widget.RelativeLayout>
