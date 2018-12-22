@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 import org.opencv.android.OpenCVLoader;
@@ -53,8 +54,8 @@ public class MainActivity extends Activity {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
 
-        dispatchTakePictureIntent();
     }
+    
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = cam.getIntent();
@@ -105,5 +106,10 @@ public class MainActivity extends Activity {
             ImageView imageView = findViewById(R.id.imv);
             imageView.setImageBitmap(im.getBitmap());
         }
+    }
+
+    public void changeLayout(View view) {
+        dispatchTakePictureIntent();
+
     }
 }

@@ -1,0 +1,121 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:2:1-25:12
+INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:2:1-25:12
+INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:2:1-25:12
+INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:2:1-25:12
+MERGED from [com.android.support:appcompat-v7:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/5f2b9426972cc3ae1e2b1941c4aac0d1/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.3.aar/f143e154d535085f08b1751fa8d13cd6/AndroidManifest.xml:2:1-11:12
+MERGED from [:sdk] /Users/oskarjanczak/Desktop/wefwds/sdk/build/intermediates/merged_manifests/debug/processDebugManifest/merged/AndroidManifest.xml:2:1-15:12
+MERGED from [:MidiDriver-1.16] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/MidiDriver-1.16.aar/d52ab1868efeef62aa4d79b901d0f321/AndroidManifest.xml:2:1-9:12
+MERGED from [com.android.support:support-fragment:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/support-fragment-27.1.1.aar/52be44e89520f8544d997525afc00379/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:animated-vector-drawable:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-27.1.1.aar/2382504b7a25f5500a434813a6896abe/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-ui:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/support-core-ui-27.1.1.aar/84365b52485baa44d0022e977475458d/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-utils:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/support-core-utils-27.1.1.aar/167527f36524ca9c454c710da4d6a63e/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-vector-drawable:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-27.1.1.aar/91180b9981781eb1d7182d44daa829ac/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-compat:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/support-compat-27.1.1.aar/b2da5ca7201b34ffa32dcaa2ee78ec90/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:livedata-core:1.1.0] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/livedata-core-1.1.0.aar/2a2038a251c23a6f45252df18e2ba60a/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:viewmodel:1.1.0] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/viewmodel-1.1.0.aar/4eb297f79190c78b08fd9b475b971bd0/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:runtime:1.1.0] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/runtime-1.1.0.aar/795b3b21e95ac7e305da67a71c321a08/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.core:runtime:1.1.0] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/runtime-1.1.0.aar/c5685c80dcca368019caff5c728edda9/AndroidManifest.xml:17:1-22:12
+INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:2:1-25:12
+INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:2:1-25:12
+INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:2:1-25:12
+	package
+		ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:3:5-28
+		INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml
+		ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:2:1-25:12
+		INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml
+		ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:2:1-25:12
+		INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:2:11-69
+uses-feature#android.hardware.camera
+ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:5:5-6:35
+MERGED from [:sdk] /Users/oskarjanczak/Desktop/wefwds/sdk/build/intermediates/merged_manifests/debug/processDebugManifest/merged/AndroidManifest.xml:11:5-13:35
+MERGED from [:sdk] /Users/oskarjanczak/Desktop/wefwds/sdk/build/intermediates/merged_manifests/debug/processDebugManifest/merged/AndroidManifest.xml:11:5-13:35
+	android:required
+		ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:6:9-32
+	android:name
+		ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:5:19-57
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:7:5-81
+	android:name
+		ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:7:22-78
+application
+ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:9:5-23:19
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.3.aar/f143e154d535085f08b1751fa8d13cd6/AndroidManifest.xml:9:5-20
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.3.aar/f143e154d535085f08b1751fa8d13cd6/AndroidManifest.xml:9:5-20
+	android:supportsRtl
+		ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:14:9-35
+	android:label
+		ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:12:9-41
+	android:roundIcon
+		ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:13:9-54
+	android:icon
+		ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:11:9-43
+	android:allowBackup
+		ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:10:9-35
+	android:theme
+		ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:15:9-59
+activity#com.ok.wefwds.MainActivity
+ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:16:9-22:20
+	android:name
+		ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:16:19-47
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:17:13-21:29
+action#android.intent.action.MAIN
+ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:18:17-69
+	android:name
+		ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:18:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:20:17-77
+	android:name
+		ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml:20:27-74
+uses-sdk
+INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml
+INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml
+MERGED from [com.android.support:appcompat-v7:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/5f2b9426972cc3ae1e2b1941c4aac0d1/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/5f2b9426972cc3ae1e2b1941c4aac0d1/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.3.aar/f143e154d535085f08b1751fa8d13cd6/AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support.constraint:constraint-layout:1.1.3] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.1.3.aar/f143e154d535085f08b1751fa8d13cd6/AndroidManifest.xml:5:5-7:41
+MERGED from [:sdk] /Users/oskarjanczak/Desktop/wefwds/sdk/build/intermediates/merged_manifests/debug/processDebugManifest/merged/AndroidManifest.xml:7:5-9:41
+MERGED from [:sdk] /Users/oskarjanczak/Desktop/wefwds/sdk/build/intermediates/merged_manifests/debug/processDebugManifest/merged/AndroidManifest.xml:7:5-9:41
+MERGED from [:MidiDriver-1.16] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/MidiDriver-1.16.aar/d52ab1868efeef62aa4d79b901d0f321/AndroidManifest.xml:5:5-7:41
+MERGED from [:MidiDriver-1.16] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/MidiDriver-1.16.aar/d52ab1868efeef62aa4d79b901d0f321/AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:support-fragment:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/support-fragment-27.1.1.aar/52be44e89520f8544d997525afc00379/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/support-fragment-27.1.1.aar/52be44e89520f8544d997525afc00379/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-27.1.1.aar/2382504b7a25f5500a434813a6896abe/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-27.1.1.aar/2382504b7a25f5500a434813a6896abe/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/support-core-ui-27.1.1.aar/84365b52485baa44d0022e977475458d/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/support-core-ui-27.1.1.aar/84365b52485baa44d0022e977475458d/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/support-core-utils-27.1.1.aar/167527f36524ca9c454c710da4d6a63e/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/support-core-utils-27.1.1.aar/167527f36524ca9c454c710da4d6a63e/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-27.1.1.aar/91180b9981781eb1d7182d44daa829ac/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-27.1.1.aar/91180b9981781eb1d7182d44daa829ac/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/support-compat-27.1.1.aar/b2da5ca7201b34ffa32dcaa2ee78ec90/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.1.1] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/support-compat-27.1.1.aar/b2da5ca7201b34ffa32dcaa2ee78ec90/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.0] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/livedata-core-1.1.0.aar/2a2038a251c23a6f45252df18e2ba60a/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.0] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/livedata-core-1.1.0.aar/2a2038a251c23a6f45252df18e2ba60a/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.0] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/viewmodel-1.1.0.aar/4eb297f79190c78b08fd9b475b971bd0/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.0] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/viewmodel-1.1.0.aar/4eb297f79190c78b08fd9b475b971bd0/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.0] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/runtime-1.1.0.aar/795b3b21e95ac7e305da67a71c321a08/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.0] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/runtime-1.1.0.aar/795b3b21e95ac7e305da67a71c321a08/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.0] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/runtime-1.1.0.aar/c5685c80dcca368019caff5c728edda9/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.0] /Users/oskarjanczak/.gradle/caches/transforms-1/files-1.1/runtime-1.1.0.aar/c5685c80dcca368019caff5c728edda9/AndroidManifest.xml:20:5-44
+INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml
+INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml
+		ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml
+		ADDED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/oskarjanczak/Desktop/wefwds/app/src/main/AndroidManifest.xml
