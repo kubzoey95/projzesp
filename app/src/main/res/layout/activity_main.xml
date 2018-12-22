@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,9 +12,9 @@
         android:layout_centerInParent="true"
         android:background="#e2e2e2"
         android:gravity="center"
-        android:text="Choose photo from gallery or take new one."
+        android:text="@string/choose_photo_from_gallery_or_take_new_one"
         android:textColor="#0e0e0e"
-        android:textSize="26dp" />
+        android:textSize="26sp" />
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -32,7 +31,8 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:onClick="changeLayout"
-            android:src="@android:drawable/ic_menu_camera" />
+            android:src="@android:drawable/ic_menu_camera"
+            android:contentDescription="@string/openCamera" />
 
         <ImageView
             android:id="@+id/imageView2"
@@ -40,7 +40,8 @@
             android:layout_height="fill_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:src="@android:drawable/ic_menu_gallery" />
+            android:src="@android:drawable/ic_menu_gallery"
+            android:contentDescription="@string/openGallery" />
     </LinearLayout>
 
     <ImageView
