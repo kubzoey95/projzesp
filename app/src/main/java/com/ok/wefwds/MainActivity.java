@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 import org.opencv.android.OpenCVLoader;
@@ -45,6 +46,10 @@ public class MainActivity extends Activity {
         System.loadLibrary("native-lib");
     }
 
+    public void changeLayout(View view) {
+        dispatchTakePictureIntent();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,16 +57,13 @@ public class MainActivity extends Activity {
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
-
-        dispatchTakePictureIntent();
     }
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = cam.getIntent();
         try {
             imageUri = Uri.fromFile(Image.createImageFile(this.getApplicationContext()));
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             return;
         }
 
@@ -87,17 +89,17 @@ public class MainActivity extends Activity {
             Mat l = im.detectLines();
             double[] lines = new double[l.height()];
 
-            for(int i=0;i<l.height();i++){
-                lines[i] = l.get(i,0)[1];
+            for (int i = 0; i < l.height(); i++) {
+                lines[i] = l.get(i, 0)[1];
             }
 
             double[] h = Image.clusters(lines, 5);
             //im.drawLines(h, new Scalar(128));
             im.applyDilation(20);
             im.applyErosion(40);
-            List<MatOfPoint> cunt  = Image.filterContours(im.contourDetector(), 3000, 0.5);
+            List<MatOfPoint> cunt = Image.filterContours(im.contourDetector(), 3000, 0.5);
             im.drawContours(cunt, new Scalar(255));
-            cunt  = Image.filterContours(im.contourDetector(), 3000, 0.5);
+            cunt = Image.filterContours(im.contourDetector(), 3000, 0.5);
             Piece piece = new Piece(Note.batchOfNotes(Image.getContoursCenters(cunt)), new Staff(h));
             piece.playNotes();
             im.drawContours(cunt, new Scalar(125));
