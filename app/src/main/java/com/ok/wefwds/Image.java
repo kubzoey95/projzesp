@@ -28,6 +28,7 @@ import org.opencv.features2d.ORB;
 import org.opencv.features2d.Params;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.LineSegmentDetector;
+import org.opencv.imgproc.Moments;
 import org.opencv.photo.Photo;
 
 import java.io.BufferedInputStream;
@@ -129,6 +130,7 @@ public class Image {
             Imgproc.line(imageMatrix,new Point(0, lines.get(i)), new Point(500, lines.get(i)),new Scalar(0,0,255), 10);
         }
     }
+
     public void applyErosion(int erosion_size){
         Imgproc.erode(imageMatrix, imageMatrix, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(2*erosion_size + 1,2*erosion_size + 1)));
     }
@@ -183,20 +185,20 @@ public class Image {
     }
 
     public double taxiMetric(double[] x,double[] y){
-        return abs(x[0] - y[0]) + abs(x[1] - y[1]);
+        return abs(x[0]  - y[0]) + abs(x[1] - y[1]);
     }
 
     public Mat detectLines(){
         Mat lines = new Mat();
-        Mat width = new Mat();
-        width.create(50,50, Core.TYPE_GENERAL);
-        Imgproc.HoughLinesP(imageMatrix, lines, 2, 2*PI/180., (int)(imageMatrix.width() * 0.4), imageMatrix.width() * 0.8, imageMatrix.width() * 0.3);
+        Imgproc.HoughLinesP(imageMatrix, lines, 2, 2*PI/180., (int)(imageMatrix.width() * 0.5), imageMatrix.width() * 0.8, imageMatrix.width() * 0.3);
 
         return lines;
     }
 
     public Mat detectLines(double threshold, double minLineLength, double maxLineGap){
         Mat lines = new Mat();
+        Mat canny = new Mat();
+        Imgproc.Canny(imageMatrix, canny, 75, 200);
         Imgproc.HoughLinesP(imageMatrix, lines, 1., PI/180., (int)(imageMatrix.width() * threshold), imageMatrix.width() * minLineLength, imageMatrix.width() * maxLineGap);
         return lines;
     }
@@ -219,13 +221,13 @@ public class Image {
         Imgproc.drawContours(imageMatrix, contours, -1, col, 50);
     }
 
-    public static List<MatOfPoint> filterContours(List<MatOfPoint> contours){
+    public static List<MatOfPoint> filterContours(List<MatOfPoint> contours, double ar, double circ){
         List<MatOfPoint> filtered = new ArrayList<>();
         for(int i = 0; i<contours.size();i++) {
             MatOfPoint2f contour = new MatOfPoint2f(contours.get(i).toArray());
             double arcLength = Imgproc.arcLength(contour, true);
             double area = Imgproc.contourArea(contour);
-            if ((4. * PI * area) / pow(arcLength,2.) > 0.5 && area > 80.){
+            if ((4. * PI * area) / pow(arcLength,2.) > circ && area > ar){
                 filtered.add(new MatOfPoint(contour.toArray()));
             }
         }
@@ -240,8 +242,17 @@ public class Image {
         return kps;
     }
 
-    public MatOfPoint getContourCenter(MatOfPoint m){
-        return new MatOfPoint();
+    public static Point getContourCenter(MatOfPoint contour){
+        Moments m = Imgproc.moments(contour);
+        return new Point(m.get_m10() / m.get_m00(), m.get_m01() / m.get_m00());
+    }
+
+    public static List<Point> getContoursCenters(List<MatOfPoint> contours){
+        List<Point> centers = new ArrayList<>();
+        for (MatOfPoint contour : contours) {
+            centers.add(getContourCenter(contour));
+        }
+        return centers;
     }
 
     private static String getPath(String file, Context context) {
