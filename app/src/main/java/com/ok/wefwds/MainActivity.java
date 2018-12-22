@@ -55,7 +55,6 @@ public class MainActivity extends Activity {
         StrictMode.setVmPolicy(builder.build());
 
     }
-    
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = cam.getIntent();
