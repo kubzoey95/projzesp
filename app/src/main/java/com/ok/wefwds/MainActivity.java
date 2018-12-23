@@ -94,7 +94,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if ((requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) || (requestCode == PICK_IMAGE && resultCode == RESULT_OK)) {
+        if ((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == PICK_IMAGE ) && resultCode == RESULT_OK) {
             Image im = new Image(imageUri);
             im.bilateralFilter();
             im.makeGray();
