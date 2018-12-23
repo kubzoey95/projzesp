@@ -53,6 +53,19 @@ public class MainActivity extends Activity {
     }
 
     public void choosePhotoFromGallery(View view) {
+        dispatchChoosePictureIntent();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+    }
+
+    private void dispatchChoosePictureIntent() {
         Intent chooseGalleryIntent = new Intent();
         chooseGalleryIntent.setType("image/*");
         chooseGalleryIntent.setAction(Intent.ACTION_GET_CONTENT);
@@ -66,15 +79,6 @@ public class MainActivity extends Activity {
         if (chooseGalleryIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(chooseGalleryIntent, PICK_IMAGE);
         }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
     }
 
     private void dispatchTakePictureIntent() {
