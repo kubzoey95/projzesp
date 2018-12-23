@@ -41,6 +41,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:src="@android:drawable/ic_menu_gallery"
+            android:onClick="choosePhotoFromGallery"
             android:contentDescription="@string/openGallery" />
     </LinearLayout>
 

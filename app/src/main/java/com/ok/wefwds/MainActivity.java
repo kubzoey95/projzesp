@@ -39,6 +39,8 @@ public class MainActivity extends Activity {
     static Uri imageUri = Uri.parse("");
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    public static final int PICK_IMAGE = 1;
+
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -48,6 +50,22 @@ public class MainActivity extends Activity {
 
     public void changeLayout(View view) {
         dispatchTakePictureIntent();
+    }
+
+    public void choosePhotoFromGallery(View view) {
+        Intent chooseGalleryIntent = new Intent();
+        chooseGalleryIntent.setType("image/*");
+        chooseGalleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+        try {
+            imageUri = Uri.fromFile(Image.createImageFile(this.getApplicationContext()));
+        } catch (IOException e) {
+            return;
+        }
+        chooseGalleryIntent.putExtra(EXTRA_OUTPUT, imageUri);
+
+        if (chooseGalleryIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(chooseGalleryIntent, PICK_IMAGE);
+        }
     }
 
     @Override
@@ -76,7 +94,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        if ((requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) || (requestCode == PICK_IMAGE && resultCode == RESULT_OK)) {
             Image im = new Image(imageUri);
             im.bilateralFilter();
             im.makeGray();
