@@ -22,11 +22,10 @@ import static android.provider.MediaStore.*;
 public class MainActivity extends Activity {
 
     static Camera cam = new Camera();
-
     static Uri imageUri = Uri.parse("");
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    public static final int PICK_IMAGE = 1;
+    static final int PICK_IMAGE = 1;
 
 
     // Used to load the 'native-lib' library on application startup.
@@ -66,7 +65,6 @@ public class MainActivity extends Activity {
         if (chooseGalleryIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(chooseGalleryIntent, PICK_IMAGE);
         }
-
     }
 
     private void dispatchTakePictureIntent() {
@@ -86,7 +84,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if ((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == PICK_IMAGE ) && resultCode == RESULT_OK) {
+        if ((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == PICK_IMAGE) && resultCode == RESULT_OK) {
             Image im = new Image(imageUri);
             im.bilateralFilter();
             im.makeGray();
