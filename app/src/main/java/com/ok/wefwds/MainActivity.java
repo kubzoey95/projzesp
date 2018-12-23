@@ -1,33 +1,20 @@
 package com.ok.wefwds;
 
 import android.app.Activity;
-import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Environment;
 import android.os.StrictMode;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfKeyPoint;
 import org.opencv.core.MatOfPoint;
-import org.opencv.core.MatOfPoint2f;
-import org.opencv.core.Point;
 import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import static android.provider.MediaStore.*;
 
@@ -79,6 +66,7 @@ public class MainActivity extends Activity {
         if (chooseGalleryIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(chooseGalleryIntent, PICK_IMAGE);
         }
+
     }
 
     private void dispatchTakePictureIntent() {
