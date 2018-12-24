@@ -2,61 +2,45 @@ package com.ok.wefwds;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
+import org.opencv.android.Utils;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
 import org.opencv.core.MatOfKeyPoint;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
-import org.opencv.dnn.Dnn;
-import org.opencv.dnn.Net;
-import org.opencv.features2d.Feature2D;
-import org.opencv.features2d.FeatureDetector;
-import org.opencv.features2d.Features2d;
-
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.android.Utils;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.features2d.ORB;
-import org.opencv.features2d.Params;
+import org.opencv.features2d.FeatureDetector;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.imgproc.LineSegmentDetector;
 import org.opencv.imgproc.Moments;
 import org.opencv.photo.Photo;
 
 import java.io.BufferedInputStream;
-import java.io.FileOutputStream;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
-import static java.lang.Math.atan;
 import static java.lang.Math.exp;
-import static java.lang.Math.log;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.lang.Math.pow;
-import static java.lang.Math.random;
-import static java.lang.Math.signum;
-import static java.lang.Math.sqrt;
 import static org.opencv.core.CvType.CV_64FC1;
 import static org.opencv.core.CvType.CV_8UC1;
 import static org.opencv.core.CvType.CV_8UC3;
@@ -277,24 +261,6 @@ public class Image {
         return "";
     }
 
-    public void drawKeyPoints(MatOfKeyPoint m, Scalar col){
-        Features2d.drawKeypoints(imageMatrix, m, imageMatrix, col);
-    }
-
-    public Mat getBlob(){
-        final int IN_WIDTH = 300;
-        final int IN_HEIGHT = 300;
-        final float WH_RATIO = (float)IN_WIDTH / IN_HEIGHT;
-        final double IN_SCALE_FACTOR = 1;
-        final double MEAN_VAL = 127.5;
-        final double THRESHOLD = 0.2;
-        Mat to_blob = new Mat();
-
-        Imgproc.resize(imageMatrix, to_blob, new Size(300,300));
-        Imgproc.cvtColor(to_blob, to_blob, Imgproc.COLOR_GRAY2RGB);
-        to_blob = Dnn.blobFromImage(to_blob, IN_SCALE_FACTOR, new Size(IN_WIDTH, IN_HEIGHT), new Scalar(MEAN_VAL, MEAN_VAL, MEAN_VAL));
-        return to_blob;
-    }
 
     public void bilateralFilter(){
         Mat contoured = new Mat();
