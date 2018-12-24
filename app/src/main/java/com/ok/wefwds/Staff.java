@@ -1,10 +1,9 @@
 package com.ok.wefwds;
 
-import java.util.Arrays;
 import org.billthefarmer.mididriver.MidiDriver;
-import org.opencv.utils.Converters;
 
-import static java.lang.Math.abs;
+import java.util.Arrays;
+
 import static java.lang.Math.round;
 import static java.lang.Math.signum;
 
