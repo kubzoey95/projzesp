@@ -2,9 +2,11 @@ package com.ok.wefwds;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.StrictMode;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -25,7 +27,7 @@ public class MainActivity extends Activity {
     static Uri imageUri = Uri.parse("");
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int PICK_IMAGE = 1;
+    static final int PICK_IMAGE = 2;
 
 
     // Used to load the 'native-lib' library on application startup.
@@ -55,16 +57,7 @@ public class MainActivity extends Activity {
         Intent chooseGalleryIntent = new Intent();
         chooseGalleryIntent.setType("image/*");
         chooseGalleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-        try {
-            imageUri = Uri.fromFile(Image.createImageFile(this.getApplicationContext()));
-        } catch (IOException e) {
-            return;
-        }
-        chooseGalleryIntent.putExtra(EXTRA_OUTPUT, imageUri);
-
-        if (chooseGalleryIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(chooseGalleryIntent, PICK_IMAGE);
-        }
+        startActivityForResult(Intent.createChooser(chooseGalleryIntent, "Select Picture"), PICK_IMAGE);
     }
 
     private void dispatchTakePictureIntent() {
@@ -82,38 +75,56 @@ public class MainActivity extends Activity {
         }
     }
 
+    private void analyzeAndPlay(Image im){
+        im.bilateralFilter();
+        im.makeGray();
+        int x[] = im.averageColor(500);
+        boolean inv = x[2] - x[0] < x[0] - x[1];
+
+        im.makeBinary(80, inv);
+        im.applyErosion(5);
+        im.applyDilation(5);
+        Mat l = im.detectLines();
+        double[] lines = new double[l.height()];
+
+        for (int i = 0; i < l.height(); i++) {
+            lines[i] = l.get(i, 0)[1];
+        }
+
+        double[] h = Image.clusters(lines, 5);
+        //im.drawLines(h, new Scalar(128));
+        im.applyDilation(20);
+        im.applyErosion(40);
+        List<MatOfPoint> cunt = Image.filterContours(im.contourDetector(), 3000, 0.5);
+        im.drawContours(cunt, new Scalar(255));
+        cunt = Image.filterContours(im.contourDetector(), 3000, 0.5);
+        Piece piece = new Piece(Note.batchOfNotes(Image.getContoursCenters(cunt)), new Staff(h));
+        piece.playNotes();
+        im.drawContours(cunt, new Scalar(125));
+        im.drawLines(h, new Scalar(125));
+        ImageView imageView = findViewById(R.id.imageView3);
+        imageView.setImageBitmap(im.getBitmap());
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if ((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == PICK_IMAGE) && resultCode == RESULT_OK) {
-            Image im = new Image(imageUri);
-            im.bilateralFilter();
-            im.makeGray();
-            int x[] = im.averageColor(500);
-            boolean inv = x[2] - x[0] < x[0] - x[1];
-
-            im.makeBinary(80, inv);
-            im.applyErosion(5);
-            im.applyDilation(5);
-            Mat l = im.detectLines();
-            double[] lines = new double[l.height()];
-
-            for (int i = 0; i < l.height(); i++) {
-                lines[i] = l.get(i, 0)[1];
+        Image im;
+        if(resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                im = new Image(imageUri);
+                analyzeAndPlay(im);
+            } else if(requestCode == PICK_IMAGE){
+                imageUri = data.getData();
+                try {
+                    Bitmap bmp = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                    im = new Image(bmp);
+                    analyzeAndPlay(im);
+                }
+                catch(IOException e){
+                    return;
+                }
             }
 
-            double[] h = Image.clusters(lines, 5);
-            //im.drawLines(h, new Scalar(128));
-            im.applyDilation(20);
-            im.applyErosion(40);
-            List<MatOfPoint> cunt = Image.filterContours(im.contourDetector(), 3000, 0.5);
-            im.drawContours(cunt, new Scalar(255));
-            cunt = Image.filterContours(im.contourDetector(), 3000, 0.5);
-            Piece piece = new Piece(Note.batchOfNotes(Image.getContoursCenters(cunt)), new Staff(h));
-            piece.playNotes();
-            im.drawContours(cunt, new Scalar(125));
-            im.drawLines(h, new Scalar(125));
-            ImageView imageView = findViewById(R.id.imv);
-            imageView.setImageBitmap(im.getBitmap());
         }
     }
 }
