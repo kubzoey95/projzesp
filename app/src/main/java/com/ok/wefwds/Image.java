@@ -80,6 +80,11 @@ public class Image {
         Utils.bitmapToMat(bmp, imageMatrix);
     }
 
+    public Image(Bitmap bmp){
+        imageMatrix = Mat.zeros(bmp.getHeight(), bmp.getWidth(), CV_64FC1);
+        Utils.bitmapToMat(bmp, imageMatrix);
+    }
+
     public Bitmap getBitmap(){
         Bitmap bmp = Bitmap.createBitmap(imageMatrix.width(), imageMatrix.height(), Bitmap.Config.RGB_565);
         Utils.matToBitmap(imageMatrix, bmp);
