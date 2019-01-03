@@ -29,8 +29,6 @@ public class Staff {
         sum = sum / (len - 1);
         line_interval = sum / 2;
         c_height = down + (2 * line_interval);
-        midi.start();
-        midi.config();
     }
 
     static int[] diatonic = new int[] {0,2,4,5,7,9,11};

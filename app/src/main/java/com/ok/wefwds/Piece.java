@@ -16,9 +16,12 @@ public class Piece {
     }
 
     public void playNotes(){
+        staff.midi.start();
+        staff.midi.config();
         for(Note note : notes){
             staff.playNote(note);
         }
+        staff.midi.stop();
     }
 
 }

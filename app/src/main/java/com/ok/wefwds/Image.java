@@ -110,7 +110,10 @@ public class Image {
     }
 
     public void blur(int size){
-        Imgproc.blur(imageMatrix, imageMatrix, new Size(size, size));
+        if(size % 2 == 0){
+            size++;
+        }
+        Imgproc.GaussianBlur(imageMatrix, imageMatrix, new Size(size, size), 0);
     }
 
     public void drawLines(List<Integer> lines){
@@ -128,20 +131,26 @@ public class Image {
         Imgproc.dilate(imageMatrix, imageMatrix, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(2*dilation_size + 1,2*dilation_size + 1)));
     }
 
+    public void cleaning(double ratio2){
+        this.applyDilation((int)(10. * ratio2));
+        this.applyErosion((int)(60. * ratio2));
+        this.applyDilation((int)(40. * ratio2));
+    }
+
     public void setImageMatrix(Mat mat){
         imageMatrix = mat;
     }
 
     public void makeBinary(int block_size, boolean inv){
         if (inv) {
-            Imgproc.adaptiveThreshold(imageMatrix, imageMatrix, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY_INV, block_size*2 + 1, 2);
+            Imgproc.adaptiveThreshold(imageMatrix, imageMatrix, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY_INV, block_size * 2 + 1, 2);
         }
         else{
-            Imgproc.adaptiveThreshold(imageMatrix, imageMatrix, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, block_size*2 + 1, 2);
+            Imgproc.adaptiveThreshold(imageMatrix, imageMatrix, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, block_size * 2 + 1, 2);
         }
     }
 
-    public void makeBinary(double thresh, boolean inv){
+    public void thresh(double thresh, boolean inv){
         if (inv) {
             Imgproc.threshold(imageMatrix, imageMatrix, thresh, 255, Imgproc.THRESH_BINARY_INV);
         }
@@ -179,16 +188,15 @@ public class Image {
 
     public Mat detectLines(){
         Mat lines = new Mat();
-        Imgproc.HoughLinesP(imageMatrix, lines, 2, 2*PI/180., (int)(imageMatrix.width() * 0.5), imageMatrix.width() * 0.8, imageMatrix.width() * 0.3);
-
+        Imgproc.HoughLinesP(imageMatrix, lines, 1, 1*PI/180., (int)(imageMatrix.width() * 0.5), imageMatrix.width() * 0.8, imageMatrix.width() * 0.3);
         return lines;
     }
 
-    public Mat detectLines(double threshold, double minLineLength, double maxLineGap){
+    public Mat detectLinesCanny(double tr1, double tr2){
         Mat lines = new Mat();
         Mat canny = new Mat();
-        Imgproc.Canny(imageMatrix, canny, 75, 200);
-        Imgproc.HoughLinesP(imageMatrix, lines, 1., PI/180., (int)(imageMatrix.width() * threshold), imageMatrix.width() * minLineLength, imageMatrix.width() * maxLineGap);
+        Imgproc.Canny(imageMatrix, canny, tr1, tr2);
+        Imgproc.HoughLinesP(canny, lines, 1, 1*PI/180., (int)(imageMatrix.width() * 0.5), imageMatrix.width() * 0.8, imageMatrix.width() * 0.3);
         return lines;
     }
 
@@ -207,28 +215,27 @@ public class Image {
     }
 
     public void drawContours(List<MatOfPoint> contours, Scalar col){
-        Imgproc.drawContours(imageMatrix, contours, -1, col, 50);
+        Imgproc.drawContours(imageMatrix, contours, -1, col, 5);
     }
 
-    public static List<MatOfPoint> filterContours(List<MatOfPoint> contours, double ar, double circ){
+    public static List<MatOfPoint> filterContours(List<MatOfPoint> contours, double ar_min, double ar_max, double circ){
         List<MatOfPoint> filtered = new ArrayList<>();
         for(int i = 0; i<contours.size();i++) {
             MatOfPoint2f contour = new MatOfPoint2f(contours.get(i).toArray());
             double arcLength = Imgproc.arcLength(contour, true);
             double area = Imgproc.contourArea(contour);
-            if ((4. * PI * area) / pow(arcLength,2.) > circ && area > ar){
+            //&& area > ar_min && area < ar_max
+            if ((4. * PI * area) / pow(arcLength,2.) > circ && area > ar_min){
                 filtered.add(new MatOfPoint(contour.toArray()));
             }
         }
         return filtered;
     }
 
-    public MatOfKeyPoint blobDetection(Context c){
-        MatOfKeyPoint kps = new MatOfKeyPoint();
-        FeatureDetector fd = FeatureDetector.create(FeatureDetector.SIMPLEBLOB);
-        fd.read(getPath("blob.xml", c));
-        fd.detect(imageMatrix, kps);
-        return kps;
+    public Mat getCircles(){
+        Mat circles = new Mat();
+        Imgproc.HoughCircles(imageMatrix, circles, Imgproc.HOUGH_GRADIENT, 1., imageMatrix.width() / 50);
+        return circles;
     }
 
     public static Point getContourCenter(MatOfPoint contour){
@@ -295,8 +302,12 @@ public class Image {
     public void drawLines(double[] heights, Scalar col){
         double width = imageMatrix.width();
         for(int i=0; i<heights.length;i++) {
-            Imgproc.line(imageMatrix, new Point(0, heights[i]), new Point(width - 1, heights[i]), col, 50);
+            Imgproc.line(imageMatrix, new Point(0, heights[i]), new Point(width - 1, heights[i]), col, 2);
         }
+    }
+
+    public void scale(double factor){
+        Imgproc.resize(imageMatrix, imageMatrix, new Size(imageMatrix.width() * factor, imageMatrix.height() * factor));
     }
 
     public static double[] distances(double[] points){
@@ -382,4 +393,5 @@ public class Image {
         }
         return new int[] {(int)(sum / ((height * width) / interval)),(int)(min / min_weights), (int)(max / max_weights)};
     }
+
 }
