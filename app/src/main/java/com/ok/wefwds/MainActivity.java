@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PICK_IMAGE = 2;
     Button playButton;
-    ImageView  cameraButton, galleryButton;
+    ImageView cameraButton, galleryButton;
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -64,18 +64,17 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Image im;
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_IMAGE_CAPTURE) {
                 im = new Image(imageUri);
                 analyzeAndPlay(im);
-            } else if(requestCode == PICK_IMAGE){
+            } else if (requestCode == PICK_IMAGE) {
                 imageUri = data.getData();
                 try {
                     Bitmap bmp = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
                     im = new Image(bmp);
                     analyzeAndPlay(im);
-                }
-                catch(IOException e){
+                } catch (IOException e) {
                     return;
                 }
             }
@@ -105,13 +104,13 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void analyzeAndPlay(Image im){
+    private void analyzeAndPlay(Image im) {
         im.bilateralFilter();
         im.makeGray();
-        double resize_ratio = Math.sqrt(215*1110) / Math.sqrt(im.imageMatrix.height() * im.imageMatrix.width());
+        double resize_ratio = Math.sqrt(215 * 1110) / Math.sqrt(im.imageMatrix.height() * im.imageMatrix.width());
         im.scale(resize_ratio);
         double ratio = Math.sqrt(im.imageMatrix.height() * im.imageMatrix.width()) / Math.sqrt(1840 * 3264);
-        int x[] = im.averageColor((int)(500. * ratio));
+        int x[] = im.averageColor((int) (500. * ratio));
         boolean inv = x[2] - x[0] < x[0] - x[1];
 
         Mat l;
@@ -125,14 +124,13 @@ public class MainActivity extends Activity {
             }
 
             h = Image.clusters(lines, 5);
-            im.makeBinary((int) (80. * ratio),inv);
+            im.makeBinary((int) (80. * ratio), inv);
             im.applyErosion((int) (5. * ratio));
-            im.applyDilation((int)(5. * ratio));
-        }
-        catch(Exception e){
-            im.makeBinary((int) (80. * ratio),inv);
+            im.applyDilation((int) (5. * ratio));
+        } catch (Exception e) {
+            im.makeBinary((int) (80. * ratio), inv);
             im.applyErosion((int) (5. * ratio));
-            im.applyDilation((int)(5. * ratio));
+            im.applyDilation((int) (5. * ratio));
             l = im.detectLines();
             double[] lines = new double[l.height()];
 
@@ -145,31 +143,31 @@ public class MainActivity extends Activity {
 
         Staff staff = new Staff(h);
         double ratio2 = staff.line_interval / 136.375;
-        im.blur((int)(staff.line_interval));
+        im.blur((int) (staff.line_interval));
         im.cleaning(ratio2);
-        im.blur((int)(staff.line_interval));
+        im.blur((int) (staff.line_interval));
 
-        im.applyDilation((int)(40. * ratio2));
+        im.applyDilation((int) (40. * ratio2));
         im.thresh(100, false);
         //im.cleaning(ratio2 / 3);
-        im.blur((int)(staff.line_interval));
+        im.blur((int) (staff.line_interval));
 
-        im.applyDilation((int)(20. * ratio2));
+        im.applyDilation((int) (20. * ratio2));
         im.thresh(80, false);
 
-        im.blur((int)(staff.line_interval));
+        im.blur((int) (staff.line_interval));
         //im.applyDilation((int)(40. * ratio2));
         im.thresh(127, false);
-        im.blur((int)(staff.line_interval));
+        im.blur((int) (staff.line_interval));
         //im.applyDilation((int)(40. * ratio2));
         im.thresh(100, false);
-        im.blur((int)(staff.line_interval));
+        im.blur((int) (staff.line_interval));
         //im.applyDilation((int)(40. * ratio2));
         im.thresh(100, false);
-        im.applyErosion((int)(staff.line_interval / 3.));
-        im.blur((int)(staff.line_interval));
+        im.applyErosion((int) (staff.line_interval / 3.));
+        im.blur((int) (staff.line_interval));
         im.thresh(170, false);
-        im.blur((int)(staff.line_interval));
+        im.blur((int) (staff.line_interval));
         im.thresh(200, false);
 
 
@@ -185,7 +183,7 @@ public class MainActivity extends Activity {
         this.toggleButtons();
     }
 
-    private void playPiece(){
+    private void playPiece() {
         piece.playNotes();
         this.toggleButtons();
     }
@@ -201,7 +199,7 @@ public class MainActivity extends Activity {
     }
 
     private void toggleButtons() {
-        if(playButton.getVisibility() == View.VISIBLE) {
+        if (playButton.getVisibility() == View.VISIBLE) {
             playButton.setVisibility(View.GONE);
             cameraButton.setVisibility(View.VISIBLE);
             galleryButton.setVisibility(View.VISIBLE);
@@ -212,7 +210,6 @@ public class MainActivity extends Activity {
             galleryButton.setVisibility(View.GONE);
         }
     }
-
 
 
 }
