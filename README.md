@@ -1,7 +1,7 @@
-# projekt zepsołowy.
+# Projekt zepsołowy.
 
 
-##wefwds
+## wefwds
 Aplikacja mobilna, która ma za zadanie zczytywać nuty ze zdjeć lub obrazów.
 
 # Jak przygotować środowisko?
@@ -23,5 +23,7 @@ Jak nie ma errors to możesz cieszyć się naszą zaawansowaną aplikacją w inn
 
 skonsultuj się z lekarzem lub farmaceutą.
 
-@kubzoey95
-@Oskii2311
+### Contributors:
+[GitHub OJ](https://github.com/Oskii2311)
+[GitHub JSH](https://github.com/kubzoey95)
+
