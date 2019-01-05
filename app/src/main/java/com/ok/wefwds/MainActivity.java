@@ -8,8 +8,6 @@ import android.os.StrictMode;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.Button;
 
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
@@ -26,11 +24,10 @@ public class MainActivity extends Activity {
     static Camera cam = new Camera();
     static Uri imageUri = Uri.parse("");
     static Piece piece = new Piece();
+     Layout layout  = new Layout(this);
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PICK_IMAGE = 2;
-    Button playButton;
-    ImageView cameraButton, galleryButton, analyzedBitMap;
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -50,8 +47,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.initializeButtons();
-        this.setPlayButtonStartOption();
+        layout.initializeButtons();
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -160,9 +156,8 @@ public class MainActivity extends Activity {
         piece = new Piece(Note.batchOfNotes(Image.getContoursCenters(cunt)), staff);
         im.drawContours(cunt, new Scalar(125));
         im.drawLines(h, new Scalar(125));
-
-        this.showBitMap(im);
-        this.toggleButtons();
+        layout.toggleButtons();
+        layout.showBitMap(im);
     }
 
     private Image processingPhoto (Image im, double ratio,boolean inv ) {
@@ -182,38 +177,9 @@ public class MainActivity extends Activity {
         return Image.clusters(lines, 5);
     }
 
-    private void showBitMap(Image im) {
-        analyzedBitMap.setVisibility(View.VISIBLE);
-        analyzedBitMap.setImageBitmap(im.getBitmap());
-    }
-
     private void playPiece() {
         piece.playNotes();
-        analyzedBitMap.setVisibility(View.GONE);
-        this.toggleButtons();
-    }
-
-    private void initializeButtons() {
-        cameraButton = findViewById(R.id.camera);
-        galleryButton = findViewById(R.id.gallery);
-        analyzedBitMap = findViewById(R.id.bitMap);
-        playButton = findViewById(R.id.play);
-    }
-
-    private void setPlayButtonStartOption() {
-        playButton.setVisibility(View.GONE);
-        playButton.setText("Play music");
-    }
-
-    private void toggleButtons() {
-        if (playButton.getVisibility() == View.VISIBLE) {
-            playButton.setVisibility(View.GONE);
-            cameraButton.setVisibility(View.VISIBLE);
-            galleryButton.setVisibility(View.VISIBLE);
-        } else {
-            playButton.setVisibility(View.VISIBLE);
-            cameraButton.setVisibility(View.GONE);
-            galleryButton.setVisibility(View.GONE);
-        }
+        layout.hideBitMap();
+        layout.toggleButtons();
     }
 }
