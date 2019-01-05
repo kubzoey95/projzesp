@@ -24,6 +24,7 @@ Jak nie ma errors to możesz cieszyć się naszą zaawansowaną aplikacją w inn
 skonsultuj się z lekarzem lub farmaceutą.
 
 ### Contributors:
-- [GitHub OJ](https://github.com/Oskii2311)
 - [GitHub JSH](https://github.com/kubzoey95)
+- [GitHub OJ](https://github.com/Oskii2311)
+
 
