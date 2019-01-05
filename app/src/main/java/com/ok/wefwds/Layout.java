@@ -8,8 +8,9 @@ import android.widget.ImageView;
 
 public class Layout extends Activity {
     Context context;
-    public Layout(Context context){
-        this.context=context;
+
+    public Layout(Context context) {
+        this.context = context;
     }
 
     Button playButton;
@@ -25,10 +26,10 @@ public class Layout extends Activity {
     }
 
     public void initializeButtons() {
-        cameraButton = ((Activity)context).findViewById(R.id.camera);
-        galleryButton = ((Activity)context).findViewById(R.id.gallery);
-        analyzedBitMap = ((Activity)context).findViewById(R.id.bitMap);
-        playButton = ((Activity)context).findViewById(R.id.play);
+        cameraButton = ((Activity) context).findViewById(R.id.camera);
+        galleryButton = ((Activity) context).findViewById(R.id.gallery);
+        analyzedBitMap = ((Activity) context).findViewById(R.id.bitMap);
+        playButton = ((Activity) context).findViewById(R.id.play);
         this.setPlayButtonStartOption();
     }
 

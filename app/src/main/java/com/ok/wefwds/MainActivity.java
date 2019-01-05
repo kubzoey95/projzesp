@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
     static Camera cam = new Camera();
     static Uri imageUri = Uri.parse("");
     static Piece piece = new Piece();
-     Layout layout  = new Layout(this);
+    Layout layout = new Layout(this);
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PICK_IMAGE = 2;
@@ -160,7 +160,7 @@ public class MainActivity extends Activity {
         layout.showBitMap(im);
     }
 
-    private Image processingPhoto (Image im, double ratio,boolean inv ) {
+    private Image processingPhoto(Image im, double ratio, boolean inv) {
         im.makeBinary((int) (80. * ratio), inv);
         im.applyErosion((int) (5. * ratio));
         im.applyDilation((int) (5. * ratio));
