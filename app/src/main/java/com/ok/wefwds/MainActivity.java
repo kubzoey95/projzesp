@@ -21,7 +21,6 @@ import java.util.List;
 
 import static android.provider.MediaStore.*;
 
-
 public class MainActivity extends Activity {
 
     static Camera cam = new Camera();
@@ -195,14 +194,12 @@ public class MainActivity extends Activity {
     }
 
     private void initializeButtons() {
-        playButton = findViewById(R.id.play);
         cameraButton = findViewById(R.id.camera);
         galleryButton = findViewById(R.id.gallery);
         analyzedBitMap = findViewById(R.id.bitMap);
-
+        playButton = findViewById(R.id.play);
         playButton.setVisibility(View.GONE);
         playButton.setText("Play music");
-
     }
 
     private void toggleButtons() {
@@ -212,7 +209,6 @@ public class MainActivity extends Activity {
             galleryButton.setVisibility(View.VISIBLE);
         } else {
             playButton.setVisibility(View.VISIBLE);
-            playButton.setText("Play music");
             cameraButton.setVisibility(View.GONE);
             galleryButton.setVisibility(View.GONE);
         }

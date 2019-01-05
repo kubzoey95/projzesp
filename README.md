@@ -6,7 +6,7 @@ Aplikacja mobilna, która ma za zadanie zczytywać nuty ze zdjeć lub obrazów.
 
 # Jak przygotować środowisko?
 
-Instalacja android studio: https://developer.android.com/studio/install
+Instalacja android studio: [android studio]https://developer.android.com/studio/install
 
 Pobieramy repozytorium `git clone ...`
 
