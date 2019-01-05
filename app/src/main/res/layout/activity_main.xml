@@ -58,7 +58,15 @@
         android:id="@+id/imageView3"
         android:layout_width="match_parent"
         android:layout_height="248dp"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="54dp"
+        android:weightSum="2"
+        tools:layout_height="200dp" />
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="match_parent"
+        android:layout_height="248dp"
+        android:layout_alignParentTop="false"
         android:layout_centerHorizontal="true"
         android:src="@drawable/music"
         android:weightSum="2" />

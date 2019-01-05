@@ -210,6 +210,4 @@ public class MainActivity extends Activity {
             galleryButton.setVisibility(View.GONE);
         }
     }
-
-
 }
