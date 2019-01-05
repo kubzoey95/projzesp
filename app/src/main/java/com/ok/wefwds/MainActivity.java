@@ -32,7 +32,6 @@ public class MainActivity extends Activity {
     Button playButton;
     ImageView cameraButton, galleryButton, analyzedBitMap;
 
-
     // Used to load the 'native-lib' library on application startup.
     static {
         OpenCVLoader.initDebug();
@@ -52,6 +51,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.initializeButtons();
+        this.setPlayButtonStartOption();
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -67,13 +67,13 @@ public class MainActivity extends Activity {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_IMAGE_CAPTURE) {
                 im = new Image(imageUri);
-                analyzeAndPlay(im);
+                analyzeAndShowButtons(im);
             } else if (requestCode == PICK_IMAGE) {
                 imageUri = data.getData();
                 try {
                     Bitmap bmp = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
                     im = new Image(bmp);
-                    analyzeAndPlay(im);
+                    analyzeAndShowButtons(im);
                 } catch (IOException e) {
                     return;
                 }
@@ -104,7 +104,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void analyzeAndPlay(Image im) {
+    private void analyzeAndShowButtons(Image im) {
         im.bilateralFilter();
         im.makeGray();
         double resize_ratio = Math.sqrt(215 * 1110) / Math.sqrt(im.imageMatrix.height() * im.imageMatrix.width());
@@ -117,28 +117,12 @@ public class MainActivity extends Activity {
         double[] h;
         try {
             l = im.detectLinesCanny(x[1], x[2]);
-            double[] lines = new double[l.height()];
-
-            for (int i = 0; i < l.height(); i++) {
-                lines[i] = l.get(i, 0)[1];
-            }
-
-            h = Image.clusters(lines, 5);
-            im.makeBinary((int) (80. * ratio), inv);
-            im.applyErosion((int) (5. * ratio));
-            im.applyDilation((int) (5. * ratio));
+            h = getH(l);
+            im = processingPhoto(im, ratio, inv);
         } catch (Exception e) {
-            im.makeBinary((int) (80. * ratio), inv);
-            im.applyErosion((int) (5. * ratio));
-            im.applyDilation((int) (5. * ratio));
+            im = processingPhoto(im, ratio, inv);
             l = im.detectLines();
-            double[] lines = new double[l.height()];
-
-            for (int i = 0; i < l.height(); i++) {
-                lines[i] = l.get(i, 0)[1];
-            }
-
-            h = Image.clusters(lines, 5);
+            h = getH(l);
         }
 
         Staff staff = new Staff(h);
@@ -170,7 +154,6 @@ public class MainActivity extends Activity {
         im.blur((int) (staff.line_interval));
         im.thresh(200, false);
 
-
         double bias = (150 * ratio2) * (150 * ratio2);
 
         List<MatOfPoint> cunt = Image.filterContours(im.contourDetector(), Math.max(staff.line_interval * staff.line_interval - bias, 0), staff.line_interval * staff.line_interval + bias, 0.7);
@@ -180,6 +163,23 @@ public class MainActivity extends Activity {
 
         this.showBitMap(im);
         this.toggleButtons();
+    }
+
+    private Image processingPhoto (Image im, double ratio,boolean inv ) {
+        im.makeBinary((int) (80. * ratio), inv);
+        im.applyErosion((int) (5. * ratio));
+        im.applyDilation((int) (5. * ratio));
+        return im;
+    }
+
+    private double[] getH(Mat l) {
+        double[] lines = new double[l.height()];
+
+        for (int i = 0; i < l.height(); i++) {
+            lines[i] = l.get(i, 0)[1];
+        }
+
+        return Image.clusters(lines, 5);
     }
 
     private void showBitMap(Image im) {
@@ -198,6 +198,9 @@ public class MainActivity extends Activity {
         galleryButton = findViewById(R.id.gallery);
         analyzedBitMap = findViewById(R.id.bitMap);
         playButton = findViewById(R.id.play);
+    }
+
+    private void setPlayButtonStartOption() {
         playButton.setVisibility(View.GONE);
         playButton.setText("Play music");
     }
