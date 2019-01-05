@@ -31,7 +31,8 @@ public class MainActivity extends Activity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PICK_IMAGE = 2;
     Button playButton;
-    ImageView cameraButton, galleryButton;
+    ImageView cameraButton, galleryButton, analyzedBitMap;
+
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -177,14 +178,19 @@ public class MainActivity extends Activity {
         piece = new Piece(Note.batchOfNotes(Image.getContoursCenters(cunt)), staff);
         im.drawContours(cunt, new Scalar(125));
         im.drawLines(h, new Scalar(125));
-        ImageView imageView = findViewById(R.id.imageView3);
-        imageView.setImageBitmap(im.getBitmap());
 
+        this.showBitMap(im);
         this.toggleButtons();
+    }
+
+    private void showBitMap(Image im) {
+        analyzedBitMap.setVisibility(View.VISIBLE);
+        analyzedBitMap.setImageBitmap(im.getBitmap());
     }
 
     private void playPiece() {
         piece.playNotes();
+        analyzedBitMap.setVisibility(View.GONE);
         this.toggleButtons();
     }
 
@@ -192,6 +198,7 @@ public class MainActivity extends Activity {
         playButton = findViewById(R.id.play);
         cameraButton = findViewById(R.id.camera);
         galleryButton = findViewById(R.id.gallery);
+        analyzedBitMap = findViewById(R.id.bitMap);
 
         playButton.setVisibility(View.GONE);
         playButton.setText("Play music");

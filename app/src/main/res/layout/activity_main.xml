@@ -55,7 +55,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/bitMap"
         android:layout_width="match_parent"
         android:layout_height="248dp"
         android:layout_alignParentBottom="true"
@@ -63,7 +63,7 @@
         android:weightSum="2"
         tools:layout_height="200dp" />
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/frontViewPhoto"
         android:layout_width="match_parent"
         android:layout_height="248dp"
         android:layout_alignParentTop="false"
