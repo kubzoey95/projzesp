@@ -1,24 +1,27 @@
-# projzesp (nazwa do zmiany pewnie)
+# projekt zepsołowy.
 
-Program do odczytu nut z obrazka
 
-# Jak ogarnąć środowisko?
+##wefwds
+Aplikacja mobilna, która ma za zadanie zczytywać nuty ze zdjeć lub obrazów.
+
+# Jak przygotować środowisko?
 
 Instalacja android studio: https://developer.android.com/studio/install
 
-Rozpakować paczkę z repo, tą która dużo zajmuje, w dogodnym miejscu.
+Pobieramy repozytorium `git clone ...`
 
-wejść do folderu w którym się rozpakowało, otworzyć tam git bash i wpisać git reset --hard (jakieś moje niepotrzebne zmiany zabrały się w paczce)
+Otwieramy projekt w Android Studio.
 
-Po odpowiednim skonfigurowaniu Android Studio - wejść do Andoid Studio i otworzyć nasz projekt - z miejsca, gdzie rozpakowało się repo.
-
-Następnie otworzyć SDK Manager i przejść do SDK Tools - zaznaczyć wszystko w ten sam sposób jak na obrazku.
+Następnie otworzyć SDK Manager i przejść do SDK Tools - zaznaczyć wszystko w ten sam sposób jak na obrazku:
 ![](README/SDKMan.PNG "SDK Manager")
 ![](README/Tools.PNG "Tak powinno być ustawione")
 
 
-Ok, chwila prawdy - zbuduj projekt, czyli kliknij w ten kilof.
+Ok, chwila prawdy - zbuduj projekt, czyli kliknij w ikonę kilofa, w prawym górnym rogu.
 
-Jak nie ma errors to spoko.
+Jak nie ma errors to możesz cieszyć się naszą zaawansowaną aplikacją w innym przypadku
 
-Jak jest errors, to skonsultuj się z lekarzem lub farmaceutą.
+skonsultuj się z lekarzem lub farmaceutą.
+
+@kubzoey95
+@Oskii2311
