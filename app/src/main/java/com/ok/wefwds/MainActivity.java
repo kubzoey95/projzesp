@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Button;
 
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
@@ -29,7 +30,8 @@ public class MainActivity extends Activity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PICK_IMAGE = 2;
-
+    Button playButton;
+    ImageView  cameraButton, galleryButton;
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -49,9 +51,36 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.initializeButtons();
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
+    }
+
+    public void playMusic(View view) {
+        this.playPiece();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Image im;
+        if(resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                im = new Image(imageUri);
+                analyzeAndPlay(im);
+            } else if(requestCode == PICK_IMAGE){
+                imageUri = data.getData();
+                try {
+                    Bitmap bmp = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                    im = new Image(bmp);
+                    analyzeAndPlay(im);
+                }
+                catch(IOException e){
+                    return;
+                }
+            }
+
+        }
     }
 
     private void dispatchChoosePictureIntent() {
@@ -101,10 +130,10 @@ public class MainActivity extends Activity {
             im.applyDilation((int)(5. * ratio));
         }
         catch(Exception e){
-        im.makeBinary((int) (80. * ratio),inv);
-        im.applyErosion((int) (5. * ratio));
-        im.applyDilation((int)(5. * ratio));
-        l = im.detectLines();
+            im.makeBinary((int) (80. * ratio),inv);
+            im.applyErosion((int) (5. * ratio));
+            im.applyDilation((int)(5. * ratio));
+            l = im.detectLines();
             double[] lines = new double[l.height()];
 
             for (int i = 0; i < l.height(); i++) {
@@ -148,37 +177,42 @@ public class MainActivity extends Activity {
 
         List<MatOfPoint> cunt = Image.filterContours(im.contourDetector(), Math.max(staff.line_interval * staff.line_interval - bias, 0), staff.line_interval * staff.line_interval + bias, 0.7);
         piece = new Piece(Note.batchOfNotes(Image.getContoursCenters(cunt)), staff);
-        piece.playNotes();
         im.drawContours(cunt, new Scalar(125));
         im.drawLines(h, new Scalar(125));
         ImageView imageView = findViewById(R.id.imageView3);
         imageView.setImageBitmap(im.getBitmap());
+
+        this.toggleButtons();
     }
 
-    public void playPiece(){
+    private void playPiece(){
         piece.playNotes();
+        this.toggleButtons();
     }
 
+    private void initializeButtons() {
+        playButton = findViewById(R.id.play);
+        cameraButton = findViewById(R.id.camera);
+        galleryButton = findViewById(R.id.gallery);
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Image im;
-        if(resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                im = new Image(imageUri);
-                analyzeAndPlay(im);
-            } else if(requestCode == PICK_IMAGE){
-                imageUri = data.getData();
-                try {
-                    Bitmap bmp = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                    im = new Image(bmp);
-                    analyzeAndPlay(im);
-                }
-                catch(IOException e){
-                    return;
-                }
-            }
+        playButton.setVisibility(View.GONE);
+        playButton.setText("Play music");
 
+    }
+
+    private void toggleButtons() {
+        if(playButton.getVisibility() == View.VISIBLE) {
+            playButton.setVisibility(View.GONE);
+            cameraButton.setVisibility(View.VISIBLE);
+            galleryButton.setVisibility(View.VISIBLE);
+        } else {
+            playButton.setVisibility(View.VISIBLE);
+            playButton.setText("Play music");
+            cameraButton.setVisibility(View.GONE);
+            galleryButton.setVisibility(View.GONE);
         }
     }
+
+
+
 }
