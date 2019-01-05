@@ -25,6 +25,7 @@ public class MainActivity extends Activity {
 
     static Camera cam = new Camera();
     static Uri imageUri = Uri.parse("");
+    static Piece piece = new Piece();
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PICK_IMAGE = 2;
@@ -146,13 +147,18 @@ public class MainActivity extends Activity {
         double bias = (150 * ratio2) * (150 * ratio2);
 
         List<MatOfPoint> cunt = Image.filterContours(im.contourDetector(), Math.max(staff.line_interval * staff.line_interval - bias, 0), staff.line_interval * staff.line_interval + bias, 0.7);
-        Piece piece = new Piece(Note.batchOfNotes(Image.getContoursCenters(cunt)), staff);
+        piece = new Piece(Note.batchOfNotes(Image.getContoursCenters(cunt)), staff);
         piece.playNotes();
         im.drawContours(cunt, new Scalar(125));
         im.drawLines(h, new Scalar(125));
         ImageView imageView = findViewById(R.id.imageView3);
         imageView.setImageBitmap(im.getBitmap());
     }
+
+    public void playPiece(){
+        piece.playNotes();
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -16,6 +16,14 @@ public class Staff {
     double c_height;
     double line_interval;
     final MidiDriver midi;
+
+    public Staff(){
+        lines = new double[0];
+        c_height = 0;
+        line_interval = 0;
+        midi = new MidiDriver();
+    }
+
     public Staff(double[] lines){
         midi = new MidiDriver();
         Arrays.sort(lines);
