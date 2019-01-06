@@ -1,5 +1,6 @@
 package com.ok.wefwds;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,6 +14,11 @@ public class Piece {
     public Piece(List<Note> notes, Staff staff){
         this.notes = notes;
         this.staff = staff;
+    }
+
+    public  Piece(){
+        this.notes = new ArrayList<>();
+        this.staff = new Staff();
     }
 
     public void playNotes(){
