@@ -179,7 +179,10 @@ public class MainActivity extends Activity {
 
     private void playPiece() {
         piece.playNotes();
-        layout.hideBitMap();
+    }
+
+    public void cancelMusic(View view) {
         layout.toggleButtons();
+        layout.hideBitMap();
     }
 }

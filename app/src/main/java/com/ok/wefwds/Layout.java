@@ -13,7 +13,7 @@ public class Layout extends Activity {
         this.context = context;
     }
 
-    Button playButton;
+    Button playButton, cancelButton;
     ImageView cameraButton, galleryButton, analyzedBitMap;
 
     public void showBitMap(Image im) {
@@ -22,7 +22,7 @@ public class Layout extends Activity {
     }
 
     public void hideBitMap() {
-        analyzedBitMap.setVisibility(View.GONE);
+        analyzedBitMap.setImageResource(0);
     }
 
     public void initializeButtons() {
@@ -30,16 +30,20 @@ public class Layout extends Activity {
         galleryButton = ((Activity) context).findViewById(R.id.gallery);
         analyzedBitMap = ((Activity) context).findViewById(R.id.bitMap);
         playButton = ((Activity) context).findViewById(R.id.play);
+        cancelButton = ((Activity) context).findViewById(R.id.cancel);
         this.setPlayButtonStartOption();
+        this.setCancelButtonStartOption();
     }
 
     public void toggleButtons() {
         if (playButton.getVisibility() == View.VISIBLE) {
             playButton.setVisibility(View.GONE);
+            cancelButton.setVisibility(View.GONE);
             cameraButton.setVisibility(View.VISIBLE);
             galleryButton.setVisibility(View.VISIBLE);
         } else {
             playButton.setVisibility(View.VISIBLE);
+            cancelButton.setVisibility(View.VISIBLE);
             cameraButton.setVisibility(View.GONE);
             galleryButton.setVisibility(View.GONE);
         }
@@ -48,5 +52,10 @@ public class Layout extends Activity {
     private void setPlayButtonStartOption() {
         playButton.setVisibility(View.GONE);
         playButton.setText("Play music");
+    }
+
+    private void setCancelButtonStartOption() {
+        cancelButton.setVisibility(View.GONE);
+        cancelButton.setText("Cancel");
     }
 }

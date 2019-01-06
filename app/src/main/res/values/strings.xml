@@ -5,4 +5,6 @@
     <string name="choose_photo_from_gallery_or_take_new_one">Choose photo from gallery or take new one.</string>
     <string name="cameraView">cameraView</string>
     <string name="playMusic">playMusic</string>
+    <string name="cancel">cancel</string>
+
 </resources>

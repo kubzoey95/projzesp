@@ -1,26 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.widget.LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#e2e2e2"
+    android:orientation="vertical"
+    android:weightSum="9.7"
     tools:context="com.ok.wefwds.MainActivity">
+
+    <ImageView
+        android:id="@+id/frontViewPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:src="@drawable/music" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:background="#e2e2e2"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="1dp"
+        android:layout_weight="2"
         android:gravity="center"
         android:text="@string/choose_photo_from_gallery_or_take_new_one"
         android:textColor="#0e0e0e"
         android:textSize="26sp" />
 
+    <ImageView
+        android:id="@+id/bitMap"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3" />
+
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_alignParentBottom="true"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"
+
         android:background="#eee"
         android:orientation="horizontal">
 
@@ -30,9 +48,9 @@
             android:layout_height="fill_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:contentDescription="@string/openCamera"
             android:onClick="changeLayout"
-            android:src="@android:drawable/ic_menu_camera"
-            android:contentDescription="@string/openCamera" />
+            android:src="@android:drawable/ic_menu_camera" />
 
         <ImageView
             android:id="@+id/gallery"
@@ -40,9 +58,9 @@
             android:layout_height="fill_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:src="@android:drawable/ic_menu_gallery"
+            android:contentDescription="@string/openGallery"
             android:onClick="choosePhotoFromGallery"
-            android:contentDescription="@string/openGallery" />
+            android:src="@android:drawable/ic_menu_gallery" />
 
         <Button
             android:id="@+id/play"
@@ -50,26 +68,18 @@
             android:layout_height="fill_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:onClick="playMusic"
-            android:contentDescription="@string/playMusic" />
+            android:contentDescription="@string/playMusic"
+            android:onClick="playMusic" />
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:contentDescription="@string/cancel"
+            android:onClick="cancelMusic" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/bitMap"
-        android:layout_width="match_parent"
-        android:layout_height="248dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="54dp"
-        android:weightSum="2"
-        tools:layout_height="200dp" />
-    <ImageView
-        android:id="@+id/frontViewPhoto"
-        android:layout_width="match_parent"
-        android:layout_height="248dp"
-        android:layout_alignParentTop="false"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/music"
-        android:weightSum="2" />
 
-
-</android.widget.RelativeLayout>
+</android.widget.LinearLayout>
