@@ -188,7 +188,7 @@ public class Image {
 
     public Mat detectLines(){
         Mat lines = new Mat();
-        Imgproc.HoughLinesP(imageMatrix, lines, 1, 1*PI/180., (int)(imageMatrix.width() * 0.5), imageMatrix.width() * 0.8, imageMatrix.width() * 0.3);
+        Imgproc.HoughLinesP(imageMatrix, lines, 1, 1*PI/180., (int)(imageMatrix.width() * 0.5), imageMatrix.width() * 0.8, imageMatrix.width() * 0.01);
         return lines;
     }
 
@@ -196,7 +196,7 @@ public class Image {
         Mat lines = new Mat();
         Mat canny = new Mat();
         Imgproc.Canny(imageMatrix, canny, tr1, tr2);
-        Imgproc.HoughLinesP(canny, lines, 1, 1*PI/180., (int)(imageMatrix.width() * 0.5), imageMatrix.width() * 0.8, imageMatrix.width() * 0.3);
+        Imgproc.HoughLinesP(canny, lines, 1, 1*PI/180., (int)(imageMatrix.width() * 0.5), imageMatrix.width() * 0.8 , imageMatrix.width() * 0.01);
         return lines;
     }
 
