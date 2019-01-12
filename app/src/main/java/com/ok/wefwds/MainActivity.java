@@ -3,6 +3,10 @@ package com.ok.wefwds;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.StrictMode;
 import android.os.Bundle;
@@ -25,6 +29,7 @@ public class MainActivity extends Activity {
     static Uri imageUri = Uri.parse("");
     static Piece piece = new Piece();
     Layout layout = new Layout(this);
+    static Bitmap preprocessedBmp = Bitmap.createBitmap(1,1, Bitmap.Config.RGB_565);
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PICK_IMAGE = 2;
@@ -101,6 +106,7 @@ public class MainActivity extends Activity {
     }
 
     private void analyzeAndShowButtons(Image im) {
+        preprocessedBmp = im.getBitmap();
         im.bilateralFilter();
         im.makeGray();
         double resize_ratio = Math.sqrt(215 * 1110) / Math.sqrt(im.imageMatrix.height() * im.imageMatrix.width());
@@ -129,20 +135,16 @@ public class MainActivity extends Activity {
 
         im.applyDilation((int) (40. * ratio2));
         im.thresh(100, false);
-        //im.cleaning(ratio2 / 3);
         im.blur((int) (staff.line_interval));
 
         im.applyDilation((int) (20. * ratio2));
         im.thresh(80, false);
 
         im.blur((int) (staff.line_interval));
-        //im.applyDilation((int)(40. * ratio2));
         im.thresh(127, false);
         im.blur((int) (staff.line_interval));
-        //im.applyDilation((int)(40. * ratio2));
         im.thresh(100, false);
         im.blur((int) (staff.line_interval));
-        //im.applyDilation((int)(40. * ratio2));
         im.thresh(100, false);
         im.applyErosion((int) (staff.line_interval / 3.));
         im.blur((int) (staff.line_interval));
@@ -157,7 +159,7 @@ public class MainActivity extends Activity {
         im.drawContours(cunt, new Scalar(125));
         im.drawLines(h, new Scalar(125));
         layout.toggleButtons();
-        layout.showBitMap(im);
+        layout.showBitMap(im.getBitmap());
     }
 
     private Image processingPhoto(Image im, double ratio, boolean inv) {

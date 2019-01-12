@@ -2,6 +2,7 @@ package com.ok.wefwds;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,9 +17,9 @@ public class Layout extends Activity {
     Button playButton, cancelButton;
     ImageView cameraButton, galleryButton, analyzedBitMap;
 
-    public void showBitMap(Image im) {
+    public void showBitMap(Bitmap im) {
         analyzedBitMap.setVisibility(View.VISIBLE);
-        analyzedBitMap.setImageBitmap(im.getBitmap());
+        analyzedBitMap.setImageBitmap(im);
     }
 
     public void hideBitMap() {
