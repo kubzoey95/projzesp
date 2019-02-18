@@ -3,10 +3,6 @@ package com.ok.wefwds;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.StrictMode;
 import android.os.Bundle;
@@ -25,6 +21,15 @@ import static android.provider.MediaStore.*;
 
 public class MainActivity extends Activity {
 
+    private static final double STAFF_LINE_CONSTANT = 136.375;
+    private static final int RESIZE_HEIGHT = 215;
+    private static final int RESIZE_WIDTH = 1110;
+    private static final int RATIO_HEIGHT = 1840;
+    private static final int RATIO_WIDTH = 3264;
+    private static final double AVERAGE_COLOR_INTERVAL = 500.;
+    private static final int BIAS_CONSTANT = 150;
+    private static final double EXPECTED_CIRCULARITY = 0.7;
+    private static final int CONTOUR_COLOR = 125;
     static Camera cam = new Camera();
     static Uri imageUri = Uri.parse("");
     static Piece piece = new Piece();
@@ -34,7 +39,6 @@ public class MainActivity extends Activity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PICK_IMAGE = 2;
 
-    // Used to load the 'native-lib' library on application startup.
     static {
         OpenCVLoader.initDebug();
         System.loadLibrary("native-lib");
@@ -76,10 +80,9 @@ public class MainActivity extends Activity {
                     im = new Image(bmp);
                     analyzeAndShowButtons(im);
                 } catch (IOException e) {
-                    return;
+
                 }
             }
-
         }
     }
 
@@ -109,74 +112,37 @@ public class MainActivity extends Activity {
         preprocessedBmp = im.getBitmap();
         im.bilateralFilter();
         im.makeGray();
-        double resize_ratio = Math.sqrt(215 * 1110) / Math.sqrt(im.imageMatrix.height() * im.imageMatrix.width());
+        double resize_ratio = Math.sqrt(RESIZE_HEIGHT * RESIZE_WIDTH) / Math.sqrt(im.imageMatrix.height() * im.imageMatrix.width());
         im.scale(resize_ratio);
-        double ratio = Math.sqrt(im.imageMatrix.height() * im.imageMatrix.width()) / Math.sqrt(1840 * 3264);
-        int x[] = im.averageColor((int) (500. * ratio));
+        double ratio = Math.sqrt(im.imageMatrix.height() * im.imageMatrix.width()) / Math.sqrt(RATIO_HEIGHT * RATIO_WIDTH);
+        int x[] = im.averageColor((int) (AVERAGE_COLOR_INTERVAL * ratio));
         boolean inv = x[2] - x[0] < x[0] - x[1];
 
         Mat l;
         double[] h;
         try {
             l = im.detectLinesCanny(x[1], x[2]);
-            h = getH(l);
-            im = processingPhoto(im, ratio, inv);
+            h = Helpers.getH(l);
+            im.processingPhoto(ratio, inv);
         } catch (Exception e) {
-            im = processingPhoto(im, ratio, inv);
+            im.processingPhoto(ratio, inv);
             l = im.detectLines();
-            h = getH(l);
+            h = Helpers.getH(l);
         }
 
         Staff staff = new Staff(h);
-        double ratio2 = staff.line_interval / 136.375;
-        im.blur((int) (staff.line_interval));
-        im.cleaning(ratio2);
-        im.blur((int) (staff.line_interval));
+        double ratio2 = staff.line_interval / STAFF_LINE_CONSTANT;
 
-        im.applyDilation((int) (40. * ratio2));
-        im.thresh(100, false);
-        im.blur((int) (staff.line_interval));
+        im.extract_notes(ratio2, staff.line_interval);
 
-        im.applyDilation((int) (20. * ratio2));
-        im.thresh(80, false);
+        double bias = Math.pow(BIAS_CONSTANT * ratio2, 2);
 
-        im.blur((int) (staff.line_interval));
-        im.thresh(127, false);
-        im.blur((int) (staff.line_interval));
-        im.thresh(100, false);
-        im.blur((int) (staff.line_interval));
-        im.thresh(100, false);
-        im.applyErosion((int) (staff.line_interval / 3.));
-        im.blur((int) (staff.line_interval));
-        im.thresh(170, false);
-        im.blur((int) (staff.line_interval));
-        im.thresh(200, false);
-
-        double bias = (150 * ratio2) * (150 * ratio2);
-
-        List<MatOfPoint> cunt = Image.filterContours(im.contourDetector(), Math.max(staff.line_interval * staff.line_interval - bias, 0), staff.line_interval * staff.line_interval + bias, 0.7);
+        List<MatOfPoint> cunt = Image.filterContours(im.contourDetector(), Math.max(Math.pow(staff.line_interval,2) - bias, 0), EXPECTED_CIRCULARITY);
         piece = new Piece(Note.batchOfNotes(Image.getContoursCenters(cunt)), staff);
-        im.drawContours(cunt, new Scalar(125));
-        im.drawLines(h, new Scalar(125));
+        im.drawContours(cunt, new Scalar(CONTOUR_COLOR));
+        im.drawLines(h, new Scalar(CONTOUR_COLOR));
         layout.toggleButtons();
         layout.showBitMap(im.getBitmap());
-    }
-
-    private Image processingPhoto(Image im, double ratio, boolean inv) {
-        im.makeBinary((int) (80. * ratio), inv);
-        im.applyErosion((int) (5. * ratio));
-        im.applyDilation((int) (5. * ratio));
-        return im;
-    }
-
-    private double[] getH(Mat l) {
-        double[] lines = new double[l.height()];
-
-        for (int i = 0; i < l.height(); i++) {
-            lines[i] = l.get(i, 0)[1];
-        }
-
-        return Image.clusters(lines, 5);
     }
 
     private void playPiece() {
