@@ -2,7 +2,7 @@
 
 
 ## wefwds
-Aplikacja mobilna, która ma za zadanie sczytywać nuty ze zdjeć lub obrazów.
+Aplikacja mobilna, która ma za zadanie czytać nuty ze zdjeć lub obrazów.
 
 # Jak przygotować środowisko?
 
